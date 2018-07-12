@@ -35,7 +35,7 @@
       extra_vars:
         satHosts:
         - name: "{{ newservername }}"
-          ipaddr: "{{ ipaddr }}"
+          ipaddr: 192.168.254.220 
           mac: 00:50:56:ff:ff:ff
     body_format: json
     validate_certs: False
