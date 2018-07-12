@@ -33,25 +33,10 @@
     password: "{{ tower_pass }}"
     body:
       extra_vars:
-        launched_from: CloudForms
-        satBaseURL: https://sat6.parmstrong.ca/api/v2/
-        satOrgURL: "{{ satBaseURL }}organizations/"
-        satLocURL: "{{ satBaseURL }}locations/"
-        satHostGroupURL: "{{ satBaseURL }}hostgroups/"
-        satComputeResourceURL: "{{ satBaseURL }}compute_resources/"
-        satDiscoveredHostsURL: "{{ satBaseURL }}discovered_hosts/"
-        satHostsURL: "{{ satBaseURL }}hosts/"
-        satUser: "{{ satUser }}"
-        satPass: "{{ satPass }}"
-        satOrganizationName: RedHatCanada
-        satLocationName: Hespeler
-        satHostGroupName: POS
-        satComputeResourceType: Vwware
         satHosts:
         - name: "{{ newservername }}"
           ipaddr: "{{ ipaddr }}"
           mac: 00:50:56:ff:ff:ff
-        satBMHNumberOfNICs: 1
     body_format: json
     validate_certs: False
     headers:
