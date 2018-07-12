@@ -23,11 +23,11 @@
     - idquery: "results[?(@.name=='{{ workflow_name }}')].id"
 
 - debug:
-    msg: "{{ workflow_job_template_id }}"
+    msg: "{{ workflow_job_template_id[0] }}"
 
 - name: Job Template to launch a Workflow Job Template
   uri:
-    url: https://{{ ansible_tower_fqdn }}/api/v1/workflow_job_templates/{{ workflow_job_template_id }}/launch/
+    url: https://{{ ansible_tower_fqdn }}/api/v1/workflow_job_templates/{{ workflow_job_template_id[0] }}/launch/
     method: POST
     user: "{{ tower_user }}"
     password: "{{ tower_pass }}"
