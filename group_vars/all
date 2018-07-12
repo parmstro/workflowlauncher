@@ -1,0 +1,5 @@
+ansible_tower_fqdn: tower.parmstrong.ca
+workflow_name: "New POS"
+satUser: admin
+satPass: ??Legend2013
+

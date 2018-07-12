@@ -2,18 +2,56 @@
 - name: Get encrypted variables
   include_vars: wf_launcher_vars.yml
 
+- name: Get the workflow_job_template_id for the Workflow name
+  uri: 
+    url: https://{{ ansible_tower_fqdn }}/api/v1/workflow_job_templates/
+    method: GET
+    user: "{{ tower_user }}"
+    password: "{{ tower_pass }}"
+    validate_certs: False
+    headers:
+      Content-Type: "application/json"
+    status_code: 200, 201
+  register: wjtresults
+
+- debug:
+    msg: "{{ wjtresults }}"
+    
+- name: Assign the workflow_job_id
+  set_fact: workflow_job_template_id={{ wjtresults.json | json_query(idquery) }}
+  vars:
+    - idquery: "results[?(@.name=='{{ workflow_name }}')].id"
+
+- debug:
+    msg: "{{ workflow_job_template_id }}"
+
 - name: Job Template to launch a Workflow Job Template
   uri:
-    url: https://{{ ansible_tower_ip }}/api/v1/workflow_job_templates/{{ workflow_job_template_id }}/launch/
+    url: https://{{ ansible_tower_fqdn }}/api/v1/workflow_job_templates/{{ workflow_job_template_id }}/launch/
     method: POST
     user: "{{ tower_user }}"
     password: "{{ tower_pass }}"
     body:
       extra_vars:
         launched_from: CloudForms
-        my_os: "{{ my_os | default('Windows Datacenter 2012 R2') }}"
-        my_vm_size: "{{ my_vm_size | default('Basic_A0') }}"
-        instance_name: "{{ my_vm_name | default('energyco-vm-01') }}"
+        satBaseURL: https://sat6.parmstrong.ca/api/v2/
+        satOrgURL: "{{ satBaseURL }}organizations/"
+        satLocURL: "{{ satBaseURL }}locations/"
+        satHostGroupURL: "{{ satBaseURL }}hostgroups/"
+        satComputeResourceURL: "{{ satBaseURL }}compute_resources/"
+        satDiscoveredHostsURL: "{{ satBaseURL }}discovered_hosts/"
+        satHostsURL: "{{ satBaseURL }}hosts/"
+        satUser: "{{ satUser }}"
+        satPass: "{{ satPass }}"
+        satOrganizationName: RedHatCanada
+        satLocationName: Hespeler
+        satHostGroupName: POS
+        satComputeResourceType: Vwware
+        satHosts:
+        - name: "{{ newservername }}"
+          ipaddr: "{{ ipaddr }}"
+          mac: 00:50:56:ff:ff:ff
+        satBMHNumberOfNICs: 1
     body_format: json
     validate_certs: False
     headers:
